@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radhika, will u be my valentine?</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-color: #ffe6e6; 
+            font-family: 'Arial', sans-serif;
+            overflow: hidden; 
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            z-index: 10;
+            position: relative;
+        }
+
+        h1 {
+            color: #d32f2f;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .gif-container img {
+            width: 200px;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative; 
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #yes-btn {
+            background-color: #ff4081;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
+        }
+
+        #yes-btn:hover {
+            transform: scale(1.1);
+        }
+
+        #no-btn {
+            background-color: #e0e0e0;
+            color: #333;
+            position: static; 
+        }
+
+        .hidden {
+            display: none;
+        }
+        
+        .shy-text {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 15px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="question-screen">
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmZlZmRjcnZ3aHZ4Ynd6Z2l4bHh6OGN6eG16eHl6eHl6eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Cat Asking">
+            </div>
+            <h1>Radhika, will u be my valentine?</h1>
+            <div class="buttons">
+                <button id="yes-btn">Yes</button>
+                <button id="no-btn">No</button>
+            </div>
+            <p id="shy-txt" class="shy-text">"No" seems a bit shy...</p>
+        </div>
+
+        <div id="success-screen" class="hidden">
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDM3bm1wZmZ4amZ4amZ4amZ4amZ4amZ4amZ4amZ4amZ4amZ4biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/T86i6yDyOYz7J6dPhf/giphy.gif" alt="Happy Cat">
+            </div>
+            <h1>YAY! 🕊️</h1>
+            <p>I knew you'd say yes! ❤️</p>
+        </div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
+        const questionScreen = document.getElementById('question-screen');
+        const successScreen = document.getElementById('success-screen');
+        const shyTxt = document.getElementById('shy-txt');
+
+        // Logic for the "No" button to run away
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', moveButton);
+
+        function moveButton() {
+            noBtn.style.position = 'fixed'; 
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+            shyTxt.style.opacity = "1";
+        }
+
+        // Logic for the "Yes" button (With Confetti!)
+        yesBtn.addEventListener('click', () => {
+            questionScreen.classList.add('hidden');
+            successScreen.classList.remove('hidden');
+            document.body.style.backgroundColor = "#ffc0cb"; 
+
+            triggerConfetti();
+        });
+
+        function triggerConfetti() {
+            const duration = 3 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
