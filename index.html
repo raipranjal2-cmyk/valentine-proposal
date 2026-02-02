@@ -48,6 +48,7 @@
             justify-content: center;
             gap: 20px;
             position: relative; 
+            min-height: 60px; /* Reserve space for the buttons */
         }
 
         button {
@@ -56,7 +57,7 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s;
+            outline: none;
         }
 
         #yes-btn {
@@ -64,6 +65,8 @@
             color: white;
             font-weight: bold;
             box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
+            transition: transform 0.2s;
+            z-index: 2; /* Make sure Yes is always clickable */
         }
 
         #yes-btn:hover {
@@ -73,7 +76,9 @@
         #no-btn {
             background-color: #e0e0e0;
             color: #333;
-            position: static; 
+            /* Absolute position allows us to slide it around freely */
+            position: absolute; 
+            transition: all 0.5s ease; /* THIS IS THE MAGIC LINE FOR CRAWLING */
         }
 
         .hidden {
@@ -94,13 +99,15 @@
     <div class="container">
         <div id="question-screen">
             <div class="gif-container">
-                <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2owYTg3djBqeWNycGgxaDJ5ZjBkajdramYyZ3A2bWlzNjQwZjJsMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f9EmXxglhdhAj1bo28/giphy.gif">
+                <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExenRyZmJwdmJkdmR6dmw3OWdubmcyZ2VmN2R2bnZxZjZ2ZjZ5bGRzYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f9EmXxglhdhAj1bo28/giphy.gif">
             </div>
             <h1>Radhika, will u be my valentine?</h1>
+            
             <div class="buttons">
                 <button id="yes-btn">Yes</button>
                 <button id="no-btn">No</button>
             </div>
+            
             <p id="shy-txt" class="shy-text">"No" seems a bit shy...</p>
         </div>
 
@@ -120,16 +127,34 @@
         const successScreen = document.getElementById('success-screen');
         const shyTxt = document.getElementById('shy-txt');
 
-        // Logic for the "No" button to run away
+        // Initial setup to place the No button next to Yes
+        // We do this in JS so it adapts to screen size
+        function placeNoButtonNormally() {
+            noBtn.style.position = "absolute";
+            // Place it slightly to the right of center
+            noBtn.style.left = "60%"; 
+            noBtn.style.top = "0";
+        }
+        
+        // Run this once when page loads
+        placeNoButtonNormally();
+
+        // Logic for the "No" button to CRAWL away
         noBtn.addEventListener('mouseover', moveButton);
         noBtn.addEventListener('touchstart', moveButton);
 
         function moveButton() {
+            // When moving, we switch to fixed so it can go anywhere on screen
             noBtn.style.position = 'fixed'; 
+            
+            // Calculate random position
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
+            
+            // Show the cheeky text
             shyTxt.style.opacity = "1";
         }
 
